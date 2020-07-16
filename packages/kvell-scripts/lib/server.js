@@ -22,9 +22,6 @@ const runServer = async (scriptConfig) => {
 
   const syncHandlers = await getDBPlugins(scriptConfig.databasePlugins);
 
-  const { routes, protocol, models, autoRequireRoutes } = scriptConfig;
-  const isHTTP = protocol === "http";
-
   const { routes, protocol, models, autoRequireRoutes, credentials } = scriptConfig;
   const isHTTP = protocol === "http";
   var creds = {};
