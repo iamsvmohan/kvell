@@ -10,19 +10,19 @@ const configErrorKeys = ["routes", "protocol", "models"];
 //   return !Array.isArray(obj) && obj === Object(obj);
 // };
 
-const createConfigObject = parsedConfigs => {
+const createConfigObject = (parsedConfigs) => {
   const configKeysStatus = {
     routes: {
-      valid: !parsedConfigs.routes ? true : Array.isArray(parsedConfigs.routes)
+      valid: !parsedConfigs.routes ? true : Array.isArray(parsedConfigs.routes),
     },
     protocol: {
       valid: !parsedConfigs.protocol
         ? true
-        : ["http", "https"].indexOf(parsedConfigs.protocol) !== -1
+        : ["http", "https"].indexOf(parsedConfigs.protocol) !== -1,
     },
     models: {
-      valid: !parsedConfigs.models ? true : Array.isArray(parsedConfigs.models)
-    }
+      valid: !parsedConfigs.models ? true : Array.isArray(parsedConfigs.models),
+    },
   };
 
   const { routes, protocol, models } = configKeysStatus;
@@ -30,7 +30,7 @@ const createConfigObject = parsedConfigs => {
   let configObject = {};
   if (!routes.valid || !protocol.valid || !models.valid) {
     const errorString = `Your ./${configFileName} contains invalid config values for:\n${configErrorKeys
-      .filter(configKey => !configKeysStatus[configKey].valid)
+      .filter((configKey) => !configKeysStatus[configKey].valid)
       .map((errorKey, index) => `${index + 1}. ${errorKey}`)
       .join("\n")}\n`;
     throw new Error(errorString);
@@ -46,7 +46,8 @@ const createConfigObject = parsedConfigs => {
       registerDocsRoute:
         parsedConfigs.registerDocsRoute === undefined
           ? parsedConfigInit.registerDocsRoute
-          : parsedConfigs.registerDocsRoute
+          : parsedConfigs.registerDocsRoute,
+      credentials: parsedConfigs.credentials || parsedConfigInit.credentials,
     };
   }
   return configObject;
@@ -66,12 +67,13 @@ const createConfigObject = parsedConfigs => {
  * @property {("http" | "https")} protocol
  * @property {boolean} autoRequireRoutes
  * @property {boolean} registerDocsRoute
+ * @property {Object} credentials
  */
 
 /**
  * @returns {Promise<ScriptsConfig>}
  */
-const parseScriptsConfig = async appSrcDirectory => {
+const parseScriptsConfig = async (appSrcDirectory) => {
   let parsedConfig = parsedConfigInit;
   const configFilePath = path.join(appSrcDirectory, `./${configFileName}`);
   const parsedConfigObject = require(configFilePath);

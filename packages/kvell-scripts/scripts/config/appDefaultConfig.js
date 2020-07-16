@@ -3,5 +3,6 @@ module.exports = {
   models: [],
   autoRequireRoutes: true,
   registerDocsRoute: true,
-  protocol: "http"
+  protocol: "http",
+  credentials:{}
 };

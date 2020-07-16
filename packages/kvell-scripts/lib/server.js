@@ -1,7 +1,7 @@
 const express = require("express");
 const chalk = require("chalk");
 const httpServer = require("http").createServer;
-// const httpsServer = require("https").createServer;
+const httpsServer = require("https").createServer;
 const getServerUrls = require("./utils/getServerUrls");
 // const attachGlobalMiddlewares = require("./utils/attachGlobalMiddlewares");
 // const { parseEnvironmentVariables } = require("./utils/parseEnvironmentVariables");
@@ -25,9 +25,22 @@ const runServer = async (scriptConfig) => {
   const { routes, protocol, models, autoRequireRoutes } = scriptConfig;
   const isHTTP = protocol === "http";
 
+  const { routes, protocol, models, autoRequireRoutes, credentials } = scriptConfig;
+  const isHTTP = protocol === "http";
+  var creds = {};
+  if (!isHTTP) {
+    if (Object.keys(credentials).length > 0 && credentials.key && credentials.cert) {
+      creds.key = fs.readFileSync(credentials.key, "utf8");
+      creds.cert = fs.readFileSync(credentials.cert, "utf8");
+    } else {
+      log();
+      log(chalk.redBright("SSL credentials is missing!!"));
+      log();
+      process.exit(2);
+    }
+  }
   // Create `server` variable for running 'http' or 'https' server based on user's configuration
-  // const server = isHTTP ? httpServer(app) : httpsServer(app);
-  const server = httpServer(app);
+  const server = isHTTP ? httpServer(app) : httpsServer(creds, app);
 
   // add middlewares before starting the server
   require("./utils/attachGlobalMiddlewares")(app, server);
