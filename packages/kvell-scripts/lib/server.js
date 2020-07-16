@@ -1,5 +1,6 @@
 const express = require("express");
 const chalk = require("chalk");
+const fs = require("fs");
 const httpServer = require("http").createServer;
 const httpsServer = require("https").createServer;
 const getServerUrls = require("./utils/getServerUrls");
