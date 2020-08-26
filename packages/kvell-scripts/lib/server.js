@@ -30,6 +30,9 @@ const runServer = async (scriptConfig) => {
     if (Object.keys(credentials).length > 0 && credentials.key && credentials.cert) {
       creds.key = fs.readFileSync(credentials.key, "utf8");
       creds.cert = fs.readFileSync(credentials.cert, "utf8");
+      if (credentials.passphrase) {
+        creds.passphrase = credentials.passphrase;
+      }
     } else {
       log();
       log(chalk.redBright("SSL credentials is missing!!"));
